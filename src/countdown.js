@@ -33,8 +33,8 @@ license: MIT
     function Countdown (container, options) {
 
     	var defaults = {
-			format: "hh:mm:ss",
-			lastTime: "2017-04-20"
+			format: "dd hh:mm:ss",
+			lastTime: "2017-04-20 24:00:00"
 		};
 		
 		for (var option in options) {
@@ -42,7 +42,7 @@ license: MIT
 		}
 
 		this.format = function (time) {
-			return defaults.format.replace(/hh/ig, time.h).replace(/mm/ig, time.m).replace(/ss/ig, time.s);
+			return defaults.format.replace(/dd/ig, time.d).replace(/hh/ig, time.h).replace(/mm/ig, time.m).replace(/ss/ig, time.s);
 		};
 
 	    this.render = function (format) {
@@ -53,15 +53,18 @@ license: MIT
 	    this.init = function () {
 	    	var that = this;
 		    if(!defaults.lastTime) return;	    		    		
-    		this.interval = setInterval(function () {
-	            var countTime = diffTime(defaults.lastTime)/1000,
-	                h = Math.floor(countTime/3600),
-	                m = Math.floor(((countTime-h*3600))/60),
-	                s = Math.floor(countTime-h*3600-m*60),
+    		this.interval = setInterval(function () {  
+	            var countTime = diffTime(defaults.lastTime)/1000;
+   	            var hour = Math.floor(countTime/3600); 	            
+	                d = Math.floor(countTime/3600/24),
+	                h = Math.floor(countTime/3600-d*24),
+	                m = Math.floor(((countTime-hour*3600))/60),
+	                s = Math.floor(countTime-hour*3600-m*60),
+	                d = (d > 9 ? d : "0" + d)
 	                h = (h > 9 ? h : "0" + h),
 	                m = (m > 9 ? m : "0" + m),
 	                s = (s > 9 ? s : "0" + s);
-	                that.render(that.format({h: h, m: m, s: s}));		                
+	                that.render(that.format({d:d, h: h, m: m, s: s}));		                
     		}, 1000);
 	    };
 
